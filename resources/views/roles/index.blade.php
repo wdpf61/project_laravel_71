@@ -11,10 +11,15 @@
         <a class="btn btn-success " href="{{ route('roles.create') }}">Create Role</a>
     </div>
 
-    <form class="input-group mb-3" action="" method="post">
-        @csrf
-        <input type="text" class="form-control" placeholder="search role..." >
+    <form class="input-group mb-3" action="{{route("roles.index")}}" method="get">
+        <input id="select-field" type="text" name="search" class="form-control" placeholder="search role..." >
         <button class="btn btn-outline-secondary" type="submit" id="button">Button</button>
+       
+        @if(request('search'))
+            <a href="{{ route('roles.index') }}" class="btn btn-outline-info">
+                Clear
+            </a>
+        @endif
     </form>
     <table class="table table-striped border">
         <thead>
@@ -26,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($roles as $role)
+            @foreach ($roles as  $key=> $role)
                 <tr>
                     <td> {{ $role->id }} </td>
                     <td>{{ $role->name }}</td>
