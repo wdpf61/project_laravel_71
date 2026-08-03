@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Invoice;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,10 @@ Route::delete("/user/delete/{id}", [UserController::class, "delete"]);
 Route::get("/roles/test" , [RoleController::class, "test"])->name("testRoute");
 Route::resource("/roles", RoleController::class); 
 
+
+
+Route::get("/students/deleted", [StudentController::class,"deletedStudents"]); 
+Route::get("/students/delete/{id}", [StudentController::class,"forceDelete"])->name("student.delete"); 
+Route::get("/students/restore/{id}", [StudentController::class,"restore"])->name("student.restore"); 
+Route::resource("/students", StudentController::class); 
 
