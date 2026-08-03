@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use App\Models\Student;
 use App\Models\User;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -27,6 +28,8 @@ class DatabaseSeeder extends Seeder
         // $this->call([
         //      ProductSeeder::class,
         // ]);
-        Product::factory(100)->create();
+        // Product::factory(100)->create();
+
+        Student::factory(50)->create();
     }
 }
