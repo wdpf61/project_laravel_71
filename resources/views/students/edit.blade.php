@@ -1,31 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.backend.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+@section("content")
+ 
+ <div class="card">
+     <div class="card-header">
+        <h4>Edit Student</h4>
+     </div>
+    <div class="card-body">
 
-<body>
 
-    <form action="{{ route('roles.update',  $role->id) }}" method="post">
+    <form action="{{ route('students.update',  $student->id) }}" method="post">
 
         @csrf
         @method("PUT")
 
-        <div>
-            <label for="name">Name</label> <br>
-            <input type="text" name="name" value="{{ $role->name }}">
-        </div>
-        <div>
+          @include('students._form')
 
             <input type="submit" name="btn_submit">
         </div>
     </form>
+    </div>
+ </div>
 
-
-</body>
-
-</html>
+@endsection

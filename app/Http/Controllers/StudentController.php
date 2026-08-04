@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
@@ -52,8 +53,8 @@ class StudentController extends Controller
             "photo" => "required|image|mimes:png,jpg,jpeg|max:5000",
             "status" => "required",
             "batch" => "required"
-        ],[
-            "name.required"=>"kjfksdjfksdjfksdjfkjsd"
+        ], [
+            "name.required" => "Please gime a Student Name"
         ]);
 
         $student = new Student();
@@ -61,16 +62,14 @@ class StudentController extends Controller
         $student->email = $request->email;
         $student->phone = $request->phone;
         $student->status = $request->status;
-        if ($request->has("photo")) {
+        $student->batch = $request->batch;
+        if ($request->hasFile("photo")) {
             $photo = $request->file("photo");
-            $photo_name = $request->name . time() .".". $photo->getClientOriginalExtension();
+            $photo_name = $request->name . time() . "." . $photo->getClientOriginalExtension();
             $photo->move(public_path("uploads"), $photo_name);
             $student->photo = $photo_name;
         }
         $student->save();
-
-  
-
         return redirect("/students/")->with("success", "Student created successfully");
     }
 
@@ -85,17 +84,53 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Student $student)
+    public function edit($id)
     {
+        $student = Student::findOrFail($id);
         return view("students.edit", compact("student"));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student) {
+    public function update(Request $request, Student $student)
+    {
 
-    
+        $request->validate([
+            "name" => "required",
+            "email" => "required|email",
+            "phone" => "required",
+            "photo" => "nullable|image|mimes:png,jpg,jpeg|max:5000",
+            "status" => "required",
+            "batch" => "required"
+        ], [
+            "name.required" => "Please gime a Student Name"
+        ]);
+
+        $student->name = $request->name;
+        $student->email = $request->email;
+        $student->phone = $request->phone;
+        $student->status = $request->status;
+        $student->batch = $request->batch;
+        
+        $student->photo = $student->photo;
+
+        if ($request->hasFile("photo")) {
+            // delete old file 
+            if ($student->photo) {
+                $old = public_path('uploads/' . $student->photo);
+                if (File::exists($old)) {
+                    File::delete($old);
+                }
+            }
+            // save new file
+            $photo = $request->file("photo");
+            $photo_name = $request->name . time() . "." . $photo->getClientOriginalExtension();
+            $photo->move(public_path("uploads"), $photo_name);
+            $student->photo = $photo_name;
+        }
+        $student->update();
+        return redirect("/students/")->with("success", "Student updated successfully");
     }
 
     /**
@@ -130,12 +165,17 @@ class StudentController extends Controller
     public function forceDelete($id)
     {
         $student = Student::withTrashed()->find($id);
+
+        $image = public_path('uploads/' . $student->photo);
+        if (File::exists($image)) {
+            File::delete($image);
+        }
+
         $student->forceDelete();
         return redirect()->back()->with("success", "Student deleted successfully");
     }
     public function restore($id)
     {
-
         $student = Student::withTrashed()->find($id);
         $student->restore();
         return redirect("/students/deleted")->with("success", "Student restored successfully");
