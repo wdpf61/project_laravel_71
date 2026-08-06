@@ -14,12 +14,13 @@ Route::get("/test",function(){
 });
 Route::get("/invoice", [Invoice::class, "ShowInvoice"]);
 
-Route::get("/user", [UserController::class, "index"])->name("userall");
-Route::get("/user/create", [UserController::class, "create"]);
-Route::post("/user/save", [UserController::class, "save"]);
-Route::get("/user/edit/{id}", [UserController::class, "edit"]);
-Route::put("/user/update/{id}", [UserController::class, "update"]);
-Route::delete("/user/delete/{id}", [UserController::class, "delete"]);
+Route::get("/user", [UserController::class, "index"])->name("users.index");
+Route::get("/user/create", [UserController::class, "create"])->name("users.create");
+Route::post("/user/save", [UserController::class, "save"])->name("users.store");
+Route::get("/user/edit/{id}", [UserController::class, "edit"])->name("users.edit");
+Route::get("/user/show/{id}", [UserController::class, "show"])->name("users.show");
+Route::put("/user/update/{id}", [UserController::class, "update"])->name("users.update");
+Route::delete("/user/delete/{id}", [UserController::class, "delete"])->name("users.destroy");
 
 Route::get("/roles/test" , [RoleController::class, "test"])->name("testRoute");
 Route::resource("/roles", RoleController::class); 

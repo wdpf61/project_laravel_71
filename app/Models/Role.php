@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     //protected $table= "roles";
+
+    function users(){
+       return $this->hasMany(User::class);
+    } 
+
 }

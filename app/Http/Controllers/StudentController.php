@@ -28,6 +28,12 @@ class StudentController extends Controller
             ->paginate(10)
             ->withQueryString();
         return view("students.index", compact("students", "search"));
+
+    
+        // $students= Student::with(['user:id,name', 'courses.subject', 'courses.teacher', 'courses.classroom','user.latestActivity','results', 'courses.subject.comments'])->get();
+        // dd($students->toArray());
+
+
     }
 
 
