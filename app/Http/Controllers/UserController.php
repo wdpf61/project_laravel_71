@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Profile;
 use App\Models\Role;
 use App\Models\Student;
+use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -49,6 +50,16 @@ class UserController extends Controller
     //    $course= Student::with(["courses", "courses.subject", "courses.teacher.user", "courses.classroom"])->find(1);
     //    //    dd($roles->toArray());
     //    return response()->json($course, 200, [], JSON_PRETTY_PRINT);
+
+    //  hasmanytrough()
+    //   $students = Teacher::with(['students', "course", "course.subject"])->find(2);
+    //   return response()->json($students, 200, [], JSON_PRETTY_PRINT);
+
+
+    // morph
+
+        $students = Teacher::with(['comments', 'user'])->find(1);
+        return response()->json($students, 200, [], JSON_PRETTY_PRINT);
 
     }
 

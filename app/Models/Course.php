@@ -28,4 +28,8 @@ class Course extends Model
     {
         return $this->morphOne(ActivityLog::class, "loggable")->latestOfMany();
     }
+
+    function comments(){
+        return $this->morphMany(Comment::class, "commentable");
+    }
 }

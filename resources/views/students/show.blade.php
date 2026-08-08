@@ -9,9 +9,5 @@
 <body>
       <div>Id :{{$role->id}}</div>
       <div>Name :{{$role->name}}</div>
-
- 
-
-
 </body>
 </html>
