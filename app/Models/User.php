@@ -13,6 +13,11 @@ class User extends Model
 {
    use HasFactory;
 
+   protected $fillable = [
+      'name','email','password', 'role_id','status'
+   ];
+
+
 //accessor   
    protected function name():Attribute{
       return Attribute::make(

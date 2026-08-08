@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Profile;
 use App\Models\Student;
+use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -29,7 +33,7 @@ class StudentController extends Controller
             ->withQueryString();
         return view("students.index", compact("students", "search"));
 
-    
+
         // $students= Student::with(['user:id,name', 'courses.subject', 'courses.teacher', 'courses.classroom','user.latestActivity','results', 'courses.subject.comments'])->get();
         // dd($students->toArray());
 
@@ -44,7 +48,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view("students.create");
+        $subjects = Subject::all();
+        return view("students.create", compact("subjects"));
     }
 
     /**
@@ -58,24 +63,54 @@ class StudentController extends Controller
             "phone" => "required",
             "photo" => "required|image|mimes:png,jpg,jpeg|max:5000",
             "status" => "required",
-            "batch" => "required"
+            "batch" => "required",
+            "bio" => "nullable",
+            'subject_ids' => 'nullable|array',
+            'subject_ids.*' => 'nullable|exists:subjects,id',
         ], [
             "name.required" => "Please gime a Student Name"
         ]);
 
-        $student = new Student();
-        $student->name = $request->name;
-        $student->email = $request->email;
-        $student->phone = $request->phone;
-        $student->status = $request->status;
-        $student->batch = $request->batch;
-        if ($request->hasFile("photo")) {
-            $photo = $request->file("photo");
-            $photo_name = $request->name . time() . "." . $photo->getClientOriginalExtension();
-            $photo->move(public_path("uploads"), $photo_name);
-            $student->photo = $photo_name;
-        }
-        $student->save();
+        DB::transaction(function () use ($request) {
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => 12345,
+                'status' => 'active',
+            ]);
+
+            Profile::create([
+                "user_id" => $user->id,
+                'phone' => $request->phone,
+                'bio' => $request->bio,
+                'address' => $request->address,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $student = new Student();
+            $student->name = $request->name;
+            $student->email = $request->email;
+            $student->phone = $request->phone;
+            $student->status = $request->status;
+            $student->batch = $request->batch;
+            $student->user_id = $user->id;
+            if ($request->hasFile("photo")) {
+                $photo = $request->file("photo");
+                $photo_name = $request->name . time() . "." . $photo->getClientOriginalExtension();
+                $photo->move(public_path("uploads"), $photo_name);
+                $student->photo = $photo_name;
+            }
+            $student->save();
+
+            $couseId = [];
+            foreach ($request->subject_ids as $key => $id) {
+                $couseId[] = $id;
+            }
+
+            $student->courses()->sync($couseId);
+        });
         return redirect("/students/")->with("success", "Student created successfully");
     }
 
@@ -92,8 +127,12 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $student = Student::findOrFail($id);
-        return view("students.edit", compact("student"));
+        $student = Student::with("courses", "user.profile")->findOrFail($id);
+        $subjects = Subject::all();
+        return view("students.edit", compact("student", "subjects"));
+        //   return response()->json($student, 200, [], JSON_PRETTY_PRINT);
+
+
     }
 
     /**
@@ -107,36 +146,59 @@ class StudentController extends Controller
             "email" => "required|email",
             "phone" => "required",
             "photo" => "nullable|image|mimes:png,jpg,jpeg|max:5000",
-            "status" => "required",
-            "batch" => "required"
+            "status" => "nullable",
+            "batch" => "nullable",
+            "bio" => "nullable",
+            'subject_ids' => 'nullable|array',
+            'subject_ids.*' => 'nullable|exists:subjects,id',
         ], [
             "name.required" => "Please gime a Student Name"
         ]);
 
-        $student->name = $request->name;
-        $student->email = $request->email;
-        $student->phone = $request->phone;
-        $student->status = $request->status;
-        $student->batch = $request->batch;
-        
-        $student->photo = $student->photo;
 
-        if ($request->hasFile("photo")) {
-            // delete old file 
-            if ($student->photo) {
-                $old = public_path('uploads/' . $student->photo);
-                if (File::exists($old)) {
-                    File::delete($old);
-                }
+        // dd($request->subject_ids);
+
+
+        DB::transaction(function () use ($request, $student) {
+            $user = User::findOrFail($student->user_id);
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => 12345,
+                'status' => 'active',
+            ]);
+
+            $profile = Profile::where("user_id", $user->id);  // primary key find   // another column where 
+            $profile->update([
+                'phone' => $request->phone,
+                'bio' => $request->bio,
+                'address' => $request->address,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+          
+            $student->name = $request->name;
+            $student->email = $request->email;
+            $student->phone = $request->phone;
+            $student->status = $request->status;
+            $student->batch = $request->batch;
+            $student->user_id = $user->id;
+            if ($request->hasFile("photo")) {
+                $photo = $request->file("photo");
+                $photo_name = $request->name . time() . "." . $photo->getClientOriginalExtension();
+                $photo->move(public_path("uploads"), $photo_name);
+                $student->photo = $photo_name;
             }
-            // save new file
-            $photo = $request->file("photo");
-            $photo_name = $request->name . time() . "." . $photo->getClientOriginalExtension();
-            $photo->move(public_path("uploads"), $photo_name);
-            $student->photo = $photo_name;
-        }
-        $student->update();
-        return redirect("/students/")->with("success", "Student updated successfully");
+            $student->update();
+
+            $courseIds = [];
+            foreach ($request->subject_ids as $key => $id) {
+                $courseIds[$id] = ['enrolled_at' => now()];
+            }
+            $student->courses()->sync($courseIds, true);
+        });
+        return redirect("/students/")->with("success", "Student update successfully");
     }
 
     /**
