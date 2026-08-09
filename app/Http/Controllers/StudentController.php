@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -119,6 +120,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
+        $this->authorize("view", $student);
         return view("students.show", compact("student"));
     }
 
@@ -141,6 +143,8 @@ class StudentController extends Controller
     public function update(Request $request, Student $student)
     {
 
+
+       $this->authorize("update", $student);
         $request->validate([
             "name" => "required",
             "email" => "required|email",
