@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
+
 use Illuminate\Database\Eloquent\Casts\Attribute; 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticable;
 
 use Illuminate\Support\Facades\Hash;
 
-class User extends Model
+class User extends Authenticable    //implements MustVerifyEmail
 {
    use HasFactory;
 
@@ -36,11 +39,11 @@ class User extends Model
    }
 
 //mutator
- protected function password():Attribute{
-    return Attribute::make(
-      set:fn($value)=> Hash::make($value)
-    );
- }
+//  protected function password():Attribute{
+//     return Attribute::make(
+//       set:fn($value)=> Hash::make($value)
+//     );
+//  }
 // 
 
 // scope

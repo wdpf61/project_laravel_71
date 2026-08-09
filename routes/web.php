@@ -6,12 +6,21 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get("/test", function () {
+    return view("test");
+});
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
 Route::get('/', function () {
-    return view('dashboard');
-});
-Route::get("/test",function(){
-   return view("test");
-});
+    return view('welcome');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+
+
 Route::get("/invoice", [Invoice::class, "ShowInvoice"]);
 
 Route::get("/user", [UserController::class, "index"])->name("users.index");
@@ -22,13 +31,17 @@ Route::get("/user/show/{id}", [UserController::class, "show"])->name("users.show
 Route::put("/user/update/{id}", [UserController::class, "update"])->name("users.update");
 Route::delete("/user/delete/{id}", [UserController::class, "delete"])->name("users.destroy");
 
-Route::get("/roles/test" , [RoleController::class, "test"])->name("testRoute");
-Route::resource("/roles", RoleController::class); 
+Route::get("/roles/test", [RoleController::class, "test"])->name("testRoute");
+Route::resource("/roles", RoleController::class);
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get("/students/deleted", [StudentController::class, "deletedStudents"]);
+    Route::get("/students/delete/{id}", [StudentController::class, "forceDelete"])->name("student.delete");
+    Route::get("/students/restore/{id}", [StudentController::class, "restore"])->name("student.restore");
+    Route::resource("/students", StudentController::class);
+});
 
 
 
-Route::get("/students/deleted", [StudentController::class,"deletedStudents"]); 
-Route::get("/students/delete/{id}", [StudentController::class,"forceDelete"])->name("student.delete"); 
-Route::get("/students/restore/{id}", [StudentController::class,"restore"])->name("student.restore"); 
-Route::resource("/students", StudentController::class); 
-
+require __DIR__ . '/auth.php';
