@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facade\Payment;
 use App\Models\Course;
 use App\Models\Profile;
 use App\Models\Role;
@@ -9,6 +10,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class UserController extends Controller
 {
@@ -58,9 +60,22 @@ class UserController extends Controller
 
     // morph
 
-        $students = Teacher::with(['comments', 'user'])->find(1);
-        return response()->json($students, 200, [], JSON_PRETTY_PRINT);
+        // $students = Teacher::with(['comments', 'user'])->find(1);
+        // return response()->json($students, 200, [], JSON_PRETTY_PRINT);
 
+        //   echo "<pre>";
+        //   print_r(app());        
+        //   echo "</pre>";
+
+        // dd(app()->payment->process(100));
+
+        // Payment::process(100);
+
+        // return response()->json( $app, 200, [], JSON_PRETTY_PRINT);
+
+        //   app()->payment->BkashPayemnt(500);
+
+        Payment::BkashPayemnt(1000);
     }
 
     function create()

@@ -4,6 +4,7 @@ use App\Http\Controllers\Invoice;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 
@@ -41,7 +42,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get("/students/restore/{id}", [StudentController::class, "restore"])->name("student.restore");
     Route::resource("/students", StudentController::class);
 });
-
 
 
 require __DIR__ . '/auth.php';
