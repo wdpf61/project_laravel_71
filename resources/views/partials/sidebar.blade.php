@@ -19,6 +19,8 @@
       <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
           <div class="navbar-vertical-content scrollbar">
               <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
+
+                 @can("view-dashboard")
                   <li class="nav-item"><!-- parent pages--><a class="nav-link dropdown-indicator"
                           href="#dashboard" role="button" data-bs-toggle="collapse" aria-expanded="true"
                           aria-controls="dashboard">
@@ -63,6 +65,9 @@
                               </a><!-- more inner pages--></li>
                       </ul>
                   </li>
+
+                 @endcan
+
                   <li class="nav-item"><!-- label-->
                       <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
                           <div class="col-auto navbar-vertical-label">App</div>

@@ -9,12 +9,11 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticable;
-
-use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticable    //implements MustVerifyEmail
 {
-   use HasFactory;
+   use HasFactory , HasRoles;
 
    protected $fillable = [
       'name','email','password', 'role_id','status'

@@ -75,7 +75,17 @@ class UserController extends Controller
 
         //   app()->payment->BkashPayemnt(500);
 
-        Payment::BkashPayemnt(1000);
+        // Payment::BkashPayemnt(1000);
+
+
+        // $user = User::with("roles")->find(2);
+
+        // // $user->assignRole("Teacher");
+
+        // $user->givePermissionTo("");
+
+        return response()->json( $user, 200, [], JSON_PRETTY_PRINT);
+
     }
 
     function create()

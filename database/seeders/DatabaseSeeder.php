@@ -27,10 +27,11 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             //  ProductSeeder::class,
-             SchoolDatabaseSeeder::class,
+            //  SchoolDatabaseSeeder::class,
+            RolePermissionSeeder::class
         ]);
         // Product::factory(100)->create();
 
-        Student::factory(50)->create();
+        //Student::factory(50)->create();
     }
 }

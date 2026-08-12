@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RolePermissionController;
 
 
 Route::get("/test", function () {
@@ -36,11 +37,43 @@ Route::get("/roles/test", [RoleController::class, "test"])->name("testRoute");
 Route::resource("/roles", RoleController::class);
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::get("/students/deleted", [StudentController::class, "deletedStudents"]);
-    Route::get("/students/delete/{id}", [StudentController::class, "forceDelete"])->name("student.delete");
-    Route::get("/students/restore/{id}", [StudentController::class, "restore"])->name("student.restore");
-    Route::resource("/students", StudentController::class);
+// Route::middleware(['auth'])->prefix("students")->group(function (){
+//     Route::get("/deleted", [StudentController::class, "deletedStudents"]);
+//     Route::get("/delete/{id}", [StudentController::class, "forceDelete"])->name("student.delete");
+//     Route::get("/restore/{id}", [StudentController::class, "restore"])->name("student.restore");
+//     });
+// Route::resource("/students", StudentController::class);
+
+
+
+
+
+
+Route::middleware(['auth'])->prefix('access-control')->name('access.')->group(function () {
+
+    // Main page
+    Route::get('/', [RolePermissionController::class, 'index'])
+        ->name('index');
+
+    // Create role
+    Route::post('/roles', [RolePermissionController::class, 'storeRole'])
+        ->name('roles.store');
+
+    // Create permission
+    Route::post('/permissions', [RolePermissionController::class, 'storePermission'])
+        ->name('permissions.store');
+
+    // Assign role to user
+    Route::post('/users/role', [RolePermissionController::class, 'assignRoleToUser'])
+        ->name('users.role');
+
+    // Assign permission directly to user
+    Route::post('/users/permission', [RolePermissionController::class, 'assignPermissionToUser'])
+        ->name('users.permission');
+
+    // Assign permissions to role
+    Route::post('/roles/permissions', [RolePermissionController::class, 'assignPermissionsToRole'])
+        ->name('roles.permissions');
 });
 
 
