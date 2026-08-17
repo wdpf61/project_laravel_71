@@ -73,11 +73,11 @@
                           <div class="col-auto navbar-vertical-label">App</div>
                           <div class="col ps-0">
                               <hr class="mb-0 navbar-vertical-divider">
-                          </div>
-                      </div><!-- parent pages--><a class="nav-link" href="app/calendar.html" role="button">
+                       </div>
+                      </div><!-- parent pages--><a class="nav-link" href="{{route('access.index')}}" role="button">
                           <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                       class="fas fa-calendar-alt"></span></span><span
-                                  class="nav-link-text ps-1">Calendar</span></div>
+                                  class="nav-link-text ps-1">Role Permission</span></div>
                       </a><!-- parent pages--><a class="nav-link" href="app/chat.html" role="button">
                           <div class="d-flex align-items-center"><span class="nav-link-icon"><span
                                       class="fas fa-comments"></span></span><span
