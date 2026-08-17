@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticable    //implements MustVerifyEmail
 {
-   use HasFactory , HasRoles;
+   use HasFactory , HasApiTokens;
 
    protected $fillable = [
       'name','email','password', 'role_id','status'
