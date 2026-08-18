@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\UserRegister;
+use App\Listeners\WelcomeMailListener;
 use App\Services\PaymentService;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+           UserRegister::class,
+           WelcomeMailListener::class
+        );
     }
 }

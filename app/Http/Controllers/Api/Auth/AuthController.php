@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Events\UserRegister;
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -25,6 +28,10 @@ class AuthController extends Controller
             'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
+
+        // Mail::to($user->email)->send(new WelcomeMail($user));
+
+        UserRegister::dispatch($user);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
