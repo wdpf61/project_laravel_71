@@ -631,3 +631,100 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2026-08-06 12:56:57
+
+
+
+-- CREATE TABLE core_subjects (
+--     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(150) NOT NULL,
+--     code VARCHAR(50) NOT NULL UNIQUE,
+--     description TEXT NULL,
+--     status TINYINT NOT NULL DEFAULT 1,
+--     created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+--     updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- ) ;
+
+INSERT INTO core_subjects (name, code, description) VALUES
+('HTML', 'HTML', 'HyperText Markup Language'),
+('CSS', 'CSS', 'Cascading Style Sheets'),
+('JavaScript', 'JS', 'JavaScript Programming'),
+('PHP', 'PHP', 'PHP Programming'),
+('Laravel', 'LARAVEL', 'Laravel Framework'),
+('MySQL', 'MYSQL', 'Database Management');
+
+CREATE TABLE core_chapters (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    subject_id BIGINT UNSIGNED NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    chapter_no INT NOT NULL,
+    description TEXT NULL,
+    status TINYINT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ;
+
+INSERT INTO core_chapters (subject_id, name, chapter_no) VALUES
+(1, 'HTML Introduction', 1),
+(1, 'HTML Forms', 2),
+(1, 'HTML Tables', 3),
+(2, 'CSS Introduction', 1),
+(2, 'CSS Selectors', 2),
+(2, 'Bootstrap', 3),
+(3, 'JavaScript Basics', 1),
+(3, 'DOM', 2),
+(3, 'AJAX', 3),
+(4, 'PHP Basics', 1),
+(4, 'PHP OOP', 2),
+(4, 'PHP MySQL', 3),
+(5, 'Laravel Basics', 1),
+(5, 'Laravel Routing', 2),
+(5, 'Laravel Eloquent', 3),
+(6, 'MySQL Basics', 1),
+(6, 'MySQL Query', 2),
+(6, 'MySQL Relationship', 3);
+
+
+CREATE TABLE core_topics (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    chapter_id BIGINT UNSIGNED NOT NULL,
+    name VARCHAR(200) NOT NULL,
+    topic_no INT NOT NULL,
+    description TEXT NULL,
+    status TINYINT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+   
+) ;
+
+INSERT INTO core_topics (chapter_id, name, topic_no) VALUES
+(1, 'HTML Introduction', 1),
+(1, 'HTML Elements', 2),
+(1, 'HTML Attributes', 3),
+(2, 'Form Input', 1),
+(2, 'Select Option', 2),
+(2, 'Checkbox and Radio', 3),
+(4, 'CSS Syntax', 1),
+(4, 'Inline CSS', 2),
+(4, 'Internal CSS', 3),
+(5, 'ID Selector', 1),
+(5, 'Class Selector', 2),
+(5, 'Attribute Selector', 3),
+(7, 'Variables', 1),
+(7, 'Data Types', 2),
+(7, 'Operators', 3),
+(8, 'DOM Selection', 1),
+(8, 'DOM Manipulation', 2),
+(8, 'Events', 3),
+(9, 'AJAX Introduction', 1),
+(9, 'GET Request', 2),
+(9, 'POST Request', 3),
+(10, 'PHP Variables', 1),
+(10, 'PHP Array', 2),
+(10, 'PHP Function', 3),
+(13, 'Laravel Installation', 1),
+(13, 'Laravel Structure', 2),
+(13, 'Configuration', 3),
+(14, 'Web Routes', 1),
+(14, 'Route Parameters', 2),
+(14, 'Named Routes', 3);

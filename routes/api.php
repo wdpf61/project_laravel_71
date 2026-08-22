@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Mail\WelcomeMail;
@@ -25,6 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
    Route::get('profile', [AuthController::class, 'profile']);
 });
 
+Route::apiResource("products", ProductController::class);
 
 Route::prefix("v1")->middleware(['throttle:10,1','auth:sanctum'])->group(function(){
    Route::apiResource("/students", StudentController::class);
