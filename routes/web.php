@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RolePermissionController;
-
+use App\Http\Controllers\TopicController;
 
 Route::get("/test", function () {
     return view("test");
@@ -46,6 +46,9 @@ Route::resource("/roles", RoleController::class);
 
 
 
+Route::get("/topic", [TopicController::class, "index"])->name("topic");
+Route::get("/topic/chapter/{id}", [TopicController::class, "subject_chapter"])->name("chapter");
+Route::get("/topic/topic/{id}", [TopicController::class, "chapter_topic"])->name("topic");
 
 
 

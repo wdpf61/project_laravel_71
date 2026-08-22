@@ -20,6 +20,7 @@
     <meta name="msapplication-TileImage" content="{{ asset('') }}/assets/img/favicons/mstile-150x150.png">
     <meta name="theme-color" content="#ffffff">
     <script src="{{ asset('') }}/assets/js/config.js"></script>
+     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('') }}/assets/vendors/simplebar/simplebar.min.js"></script>
 
     <!-- ===============================================--><!--    Stylesheets--><!-- ===============================================-->
@@ -33,7 +34,7 @@
     <link href="{{ asset('') }}/assets/css/user.min.css" rel="stylesheet" id="user-style-default">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/4.0.0/jquery.min.js" integrity="sha512-8LENNbXmzI/Gbj+OwXmqR6V4QaUAw0/porPzy1+dQoJqC0JPHedWoe0DDOTL2uHA5XXJyIsPtiMHH86pVlay6A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         var isRTL = JSON.parse(localStorage.getItem('isRTL'));
         if (isRTL) {
@@ -272,8 +273,8 @@
     <script src="{{ asset('') }}/assets/vendors/list.js/list.min.js"></script>
     <script src="{{ asset('') }}/assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    @yield('js')
-
+   
+    @stack('js')
     <script>
         $('#select-field').select2({
             theme: 'bootstrap-5'

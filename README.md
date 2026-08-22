@@ -40,3 +40,26 @@ Find permission by name	           Permission::findByName('view-students')
 
 
 
+//ajax
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN':
+            $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$.ajax({
+    url: '/products',
+    type: 'GET',
+    success: function(response) {
+        console.log(response);
+    }
+});
+
+
+
+
+
+
