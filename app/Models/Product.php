@@ -10,6 +10,6 @@ class Product extends Model
 {
   use HasFactory,  SoftDeletes;
      protected $fillable = [
-      'name','price','qty', 'photo','status','description'
+      'name','price','qty', 'photo','description','status'
      ];
 }

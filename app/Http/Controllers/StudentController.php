@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ImportErrorExport;
+use App\Exports\StudentExport;
+use App\Exports\StudentExportSample;
+use App\Imports\StudentImport;
 use App\Models\Profile;
 use App\Models\Student;
 use App\Models\Subject;
@@ -11,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -144,7 +149,7 @@ class StudentController extends Controller
     {
 
 
-       $this->authorize("update", $student);
+        $this->authorize("update", $student);
         $request->validate([
             "name" => "required",
             "email" => "required|email",
@@ -181,7 +186,7 @@ class StudentController extends Controller
                 'updated_at' => now(),
             ]);
 
-          
+
             $student->name = $request->name;
             $student->email = $request->email;
             $student->phone = $request->phone;
@@ -252,4 +257,63 @@ class StudentController extends Controller
         $student->restore();
         return redirect("/students/deleted")->with("success", "Student restored successfully");
     }
+    public function sampleExport()
+    {
+        return  Excel::download(new StudentExportSample(), "sampleStudent.xlsx");
+    }
+    public function studentExport()
+    {
+        return  Excel::download(new StudentExport(), "Student.xlsx");
+    }
+    public function importview()
+    {
+        return  view('students.import');
+    }
+    // public function inportStore(Request $request)
+    // {
+    //     $request->validate([
+    //         'file' => 'required|mimes:xlsx,csv,xls',
+    //     ]);
+    //     $import = new StudentImport();
+    //     Excel::import($import, $request->file('file'));
+
+    //     if ($import->failures()->isNotEmpty()) {
+    //         $failedRows = [];
+
+    //         foreach ($import->failures() as $key => $failure) {
+    //             $row = $failure->values();
+    //             $row["validation_error"] = implode(",", $failure->errors());
+    //             $failedRows[] = $row;
+    //         }
+
+    //         return Excel::download(new StudentExportSample($failedRows), 'failed_rows.xlsx');
+    //     }
+
+
+    //     return back()->with('success', 'Data imported successfully ');
+    // }
+    
+    // advance 
+    // public function inportStore(Request $request)
+    // {
+    //     $request->validate(['file' => 'required|mimes:xlsx,xls,csv',]);
+    //     $import = new StudentImport();
+    //     Excel::import($import, $request->file('file')); 
+    //     if ($import->failures()->isNotEmpty()) {
+    //         $errors = [];
+    //         foreach ($import->failures() as $failure) {
+    //             $rowNumber = $failure->row();
+    //             foreach ($failure->errors() as $message) {
+    //                 $errors[] = ['row' => $rowNumber, 'error' => "Row {$rowNumber}: {$message}",];
+    //             }
+    //         }
+    //         return Excel::download(new ImportErrorExport($errors), 'import_errors.xlsx');
+    //     } 
+    //     DB::transaction(function () use ($import) {
+    //         foreach ($import->getRows() as $row) {
+    //             Student::create(['name' => $row['name'], 'phone' => $row['phone'], 'email' => $row['email'], 'batch' => $row['batch'], 'photo' => $row['photo'] ?? null, 'status' => $row['status'],]);
+    //         }
+    //     });
+    //     return back()->with('success', 'All students imported successfully.');
+    // }
 }

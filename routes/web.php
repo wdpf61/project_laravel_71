@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Invoice;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentController;
@@ -44,7 +45,10 @@ Route::resource("/roles", RoleController::class);
 //     });
 // Route::resource("/students", StudentController::class);
 
-
+ Route::get("/students/sample/export", [StudentController::class, "sampleExport"]);
+ Route::get("/students/export", [StudentController::class, "studentExport"]);
+ Route::get("/students/import", [StudentController::class, "importview"]);
+ Route::post("/students/import", [StudentController::class, "inportStore"]);
 
 Route::get("/topic", [TopicController::class, "index"])->name("topic");
 Route::get("/topic/chapter/{id}", [TopicController::class, "subject_chapter"])->name("chapter");
@@ -78,6 +82,11 @@ Route::middleware(['auth'])->prefix('access-control')->name('access.')->group(fu
     Route::post('/roles/permissions', [RolePermissionController::class, 'assignPermissionsToRole'])
         ->name('roles.permissions');
 });
+
+
+ Route::get("product/export", [ProductController::class,"export"]);
+ Route::get("product/import", [ProductController::class,"importview"]);
+ Route::post("product/import", [ProductController::class,"import"]);
 
 
 require __DIR__ . '/auth.php';

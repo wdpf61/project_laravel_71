@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\ImportErrorExport;
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ProductImport;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -134,5 +138,34 @@ class ProductController extends Controller
             "success" => true,
             "data" => "successfully deleted"
         ]);
+    }
+    public function export()
+    {
+        return Excel::download(new ProductExport(), "all_product.csv");
+    }
+    public function importview()
+    {
+        return view("products.import");
+    }
+    public function import(Request $request)
+    {
+         $request->validate([
+               'file' => 'required|mimes:xlsx,csv,xls',
+         ]);
+
+    
+         $import= new ProductImport();
+         Excel::import($import, $request->file("file"));
+
+         if($import->failures()->isNotEmpty()){
+            $failedRows= [];
+           foreach ($import->failures() as $key => $failure) {
+                $row = $failure->values();
+                $row["validation_error"] = implode(",", $failure->errors());
+                $failedRows[] = $row;
+            }
+            return Excel::download(new ImportErrorExport($failedRows), 'failed_rows.xlsx');
+         }
+         return back()->with("success", "file has been uploaded successfully");
     }
 }
