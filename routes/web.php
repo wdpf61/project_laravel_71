@@ -89,4 +89,11 @@ Route::middleware(['auth'])->prefix('access-control')->name('access.')->group(fu
  Route::post("product/import", [ProductController::class,"import"]);
 
 
+ use App\Http\Controllers\QuestionImportController;
+
+Route::get('/questions/import', [QuestionImportController::class, 'showForm'])->name('questions.import.form');
+Route::get('/questions/template', [QuestionImportController::class, 'downloadTemplate'])->name('questions.template');
+Route::post('/questions/import', [QuestionImportController::class, 'import'])->name('questions.import.submit');
+
+
 require __DIR__ . '/auth.php';

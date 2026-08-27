@@ -24,7 +24,7 @@ class StudentExportSample implements FromCollection, WithHeadings
             'photo',
             'status',
             "validation_errors"
-        ];;
+        ];
      }
     /**
     * @return \Illuminate\Support\Collection
