@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Invoice;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
@@ -90,10 +91,33 @@ Route::middleware(['auth'])->prefix('access-control')->name('access.')->group(fu
 
 
  use App\Http\Controllers\QuestionImportController;
+use App\Http\Controllers\SslcommerzController;
 
 Route::get('/questions/import', [QuestionImportController::class, 'showForm'])->name('questions.import.form');
 Route::get('/questions/template', [QuestionImportController::class, 'downloadTemplate'])->name('questions.template');
 Route::post('/questions/import', [QuestionImportController::class, 'import'])->name('questions.import.submit');
 
+
+Route::controller(OrderController::class)
+    ->prefix('orders')
+    ->name('orders.')
+    ->group(function () {
+
+        Route::get('create', 'create')->name('create');
+
+        Route::post('checkout', 'store')->name('store');
+
+    });
+// Route::post('/checkout', [OrderController::class, 'store'])->name('checkout');
+Route::get('/order', [OrderController::class, 'index'])->name('order');
+Route::controller(SslcommerzController::class)
+    ->prefix('sslcommerz') // prefix to avoid conflicts
+    ->name('sslc.')
+    ->group(function () {
+        Route::post('success', 'success')->name('success');
+        Route::post('failure', 'failure')->name('failure');
+        Route::post('cancel', 'cancel')->name('cancel');
+        Route::post('ipn', 'ipn')->name('ipn');
+    });
 
 require __DIR__ . '/auth.php';

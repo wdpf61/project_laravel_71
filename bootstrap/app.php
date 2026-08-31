@@ -18,6 +18,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             "admin"=> AdminMiddleware::class,
         ]);
+        $middleware->validateCsrfTokens(except:[
+           'sslcommerz/success',
+           'sslcommerz/failure',
+           'sslcommerz/cancel',
+           'sslcommerz/ipn',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, Request $request) {
